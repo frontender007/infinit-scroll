@@ -19,6 +19,7 @@ body {
     text-align: center;
     background-color: #C9CCD5;
     padding: 20px;
+    overflow: hidden;
 }
 
 .item {
@@ -27,11 +28,9 @@ body {
 
 img {
     width: 100%;
-}
-
-.item, img {
     border-radius: 15px;
 }
+
 
 h1 {
     font-size: 4rem;
