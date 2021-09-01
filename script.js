@@ -1,5 +1,7 @@
 const imageContainer = document.getElementById('image-container');
 const loader = document.getElementById('loader');
+const btnScroll = document.getElementById('btn-scroll');
+
 
 let count = 5;
 let totalImages = 0;
@@ -50,6 +52,7 @@ function displayPhotos(arr) {
 }
 
 async function getPhotos() {
+    
     try {
         const response = await fetch(apiUrl);
         const data = await response.json();
@@ -62,12 +65,28 @@ async function getPhotos() {
 
 }
 
-
 window.addEventListener('scroll', function() {
+
     if (window.innerHeight + window.scrollY >= this.document.body.offsetHeight - 1000 && readyToLoadMorePhotos) {
         getPhotos();
         readyToLoadMorePhotos = false;
     }
+
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        btnScroll.style.display = 'block';
+
+        btnScroll.addEventListener('click', () => {
+            window.scroll({
+                top: 0,
+                behavior: 'smooth'
+            })
+        });
+    } else {
+        btnScroll.style.display = 'none';
+    }
 });
+
+
+
 
 getPhotos();

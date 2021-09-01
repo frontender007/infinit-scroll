@@ -44,15 +44,15 @@ h2 {
     text-transform: uppercase;
 }
 
-/* .gotoTop {
-    text-decoration: none;
-    font-size: 2.5rem;
-    padding: 10px 28px;
-    height: 50px;
-    width: 50px;
-    border: 2px solid blue;
-    border-radius: 50%;
+.btn-scroll {
+    font-size: 3rem;
     position: fixed;
-    right: 20;
-    bottom: 20;
-} */
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+    display: hidden;
+}
+
+.btn-scroll:hover {
+    color: #E63E6D;
+}
