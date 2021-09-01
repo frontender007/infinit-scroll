@@ -1,19 +1,49 @@
 const imageContainer = document.getElementById('image-container');
 const loader = document.getElementById('loader');
 
-const API_KEY = 'uZk8yKbSKqkR3BSFJ3XyV9JEig4poOfPS5i-Y0S_fjM';
 let count = 5;
+let totalImages = 0;
+let imagesLoaded = 0;
+let readyToLoadMorePhotos = false;
+
+const API_KEY = 'uZk8yKbSKqkR3BSFJ3XyV9JEig4poOfPS5i-Y0S_fjM';
 const apiUrl = `https://api.unsplash.com/photos/random?client_id=${API_KEY}&count=${count}`;
 
 
-function renderImagesOnThePage(arr) {
+
+// helper function to set attributes to the dom elements
+
+function setAttributes(element, attributes) {
+    for (const key in attributes) {
+        element.setAttribute(key, attributes[key]);
+    }
+}
+
+function imageLoaded() {
+    imagesLoaded++;
+    if (imagesLoaded === 5) {
+        readyToLoadMorePhotos = true;
+    }
+}
+
+function displayPhotos(arr) {
+        imagesLoaded = 0;
     arr.forEach(photo => {
         const div = document.createElement('div');
-        // const title = document.createElement('h3');
-        // title.textContent(photo.alt_attribute);
         const img = document.createElement('img');
-        img.setAttribute('src', photo.urls.regular);
-        // div.appendChild(title);
+        const h2 = document.createElement('h2');
+        h2.textContent = photo.alt_description ? photo.alt_description : "No title available";
+        setAttributes(div, {
+            class: 'item'
+        });
+
+        setAttributes(img, {
+            src: photo.urls.regular,
+            alt: photo.alt_description
+        });
+        
+        img.addEventListener('load', imageLoaded);
+        div.appendChild(h2);
         div.appendChild(img);
         imageContainer.appendChild(div);
     });
@@ -24,10 +54,20 @@ async function getPhotos() {
         const response = await fetch(apiUrl);
         const data = await response.json();
         loader.hidden = true;
-        renderImagesOnThePage(data);
+        totalImages = data.length;
+        displayPhotos(data);
     } catch (error) {
         console.log(error);
     }
+
 }
+
+
+window.addEventListener('scroll', function() {
+    if (window.innerHeight + window.scrollY >= this.document.body.offsetHeight - 1000 && readyToLoadMorePhotos) {
+        getPhotos();
+        readyToLoadMorePhotos = false;
+    }
+});
 
 getPhotos();
